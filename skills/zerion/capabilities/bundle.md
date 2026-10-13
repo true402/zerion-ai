@@ -182,9 +182,13 @@ wallet's `type` and `reviewThresholdUsd` from `zerion wallet list` first:
 
 - **`"route":"local"`** — a keystore wallet (created or imported in the CLI) with an agent token,
   where the USD value the call moves (what it deposits, withdraws or claims) isn't over its review
-  threshold. Set `walletName` to the wallet's `name` too: local signing finds the key by it.
-  `bundle` re-runs the agent policies, then signs and broadcasts at once, so show the user the plan
-  and wait for a yes before you run it.
+  threshold. Set `walletName` to the wallet's `name` too: local signing finds the key by it, and
+  without it the group comes back `failed` ("Failed to convert JavaScript value `Undefined`…").
+  Signing uses the **active** agent token, which belongs to the default wallet, so if the envelope's
+  wallet isn't the default, run `zerion agent use-token --wallet <name>` first (it also makes that
+  wallet the default). Otherwise the group fails with `API key '…' does not have access to wallet`.
+  `bundle` signs and broadcasts at once, so show the user the plan and wait for a yes before you
+  run it.
 - **`"route":"web-app"`** — a read-only wallet; a keystore wallet whose threshold the call goes
   over, or that has a threshold but the call can't be priced; or the user asks to review in the
   browser or sign with another wallet. An address the CLI doesn't know yet is added read-only with `zerion wallet add
@@ -192,7 +196,8 @@ wallet's `type` and `reviewThresholdUsd` from `zerion wallet list` first:
   Show the plan and the link in the same message.
 
 Anything other than `"web-app"`, a missing field included, signs locally. One web-app group sends
-the whole queue to the web app (step 4 above).
+the whole queue to the web app (step 4 above). On either route `bundle` first re-checks the default
+wallet's agent policies, so a `policy_denied` can stop a web-app bundle too.
 
 Write the envelope to a file so shell quoting can't mangle it:
 
