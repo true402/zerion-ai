@@ -191,9 +191,9 @@ wallet's `type` and `reviewThresholdUsd` from `zerion wallet list` first:
   run it.
 - **`"route":"web-app"`** — a read-only wallet; a keystore wallet whose threshold the call goes
   over, or that has a threshold but the call can't be priced; or the user asks to review in the
-  browser or sign with another wallet. An address the CLI doesn't know yet is added read-only with `zerion wallet add
-  <address|ens> --name <name>`, goes in the envelope's `address`, and signs through app.zerion.io.
-  Show the plan and the link in the same message.
+  browser or sign with another wallet. An address the CLI doesn't know yet is added read-only with
+  `zerion wallet add <address|ens> --name <name>`, goes in the envelope's `address`, and signs
+  through app.zerion.io. Show the plan and the link in the same message.
 
 Anything other than `"web-app"`, a missing field included, signs locally. One web-app group sends
 the whole queue to the web app (step 4 above). On either route `bundle` first re-checks the default
